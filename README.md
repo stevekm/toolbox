@@ -14,9 +14,9 @@ git reset --hard <commit_ID> # e.g. d487e18b3d27900160f79b12f56c8e106150151c
 git push --force
 ```
 
-- [Roll back to a specific commit in the repo history](http://stackoverflow.com/a/2007704/5359531)
+- [Roll back all files to specific commit's state](http://stackoverflow.com/a/4114122/5359531)
 ```bash
-git checkout <commit_ID> .
+git checkout <commit_ID> 
 ```
 
 - [Update all submodules](http://stackoverflow.com/a/5828396/5359531)
