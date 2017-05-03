@@ -10,7 +10,7 @@ git push --force
 [Update all submodules](http://stackoverflow.com/a/5828396/5359531)
 
 ```bash
-git submodule update
+git pull --recurse-submodules  && git submodule update --recursive --remote
 
 git submodule foreach git pull
 
