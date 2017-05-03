@@ -6,8 +6,9 @@ general scripts that I use a lot
 
 ## Git
 
-- Remove a file or commit from the repository history by rolling back to a known good commit, then updating the remote to match
+- Remove a file or commit from the repository history by rolling the repo history back to a known good commit, then updating the remote to match
   - NOTE: Will destroy any unstaged changes and completely remove changes to tracked files from the history
+  - NOTE: This is dangerous, use with caution
 ```bash
 git reset --hard <commit_ID> # e.g. d487e18b3d27900160f79b12f56c8e106150151c
 git push --force
