@@ -203,5 +203,22 @@ def print_str_source(str_name, str_obj, quote = True):
     elif quote == True:
         print('{0} = "{1}"'.format(str_name, str_obj))
 
+def find_files(pattern, path, verbose = False):
+    '''
+    Recursively search for files that match a pattern in a directory tree
+    e.g.
+    find_files("*.sh", ".", verbose = True)
+    '''
+    import os
+    import fnmatch
+    results = []
+    if verbose == True: print('Now searching for files that match pattern "{0}" in location "{1}"'.format(pattern, path))
+    for root, dirs, files in os.walk(path):
+        for name in files:
+            if fnmatch.fnmatch(name, pattern):
+                results.append(os.path.join(root, name))
+    if verbose == True: print('Found {0} matches'.format(len(results)))
+    return(results)
+
 if __name__ == "__main__":
     print("This script does nothing, it only holds functions")
