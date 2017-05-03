@@ -6,3 +6,15 @@ Remove a file or commit from the repository history by rolling back to a known g
 git reset --hard <commit_ID> # e.g. d487e18b3d27900160f79b12f56c8e106150151c
 git push --force
 ```
+
+[Update all submodules](http://stackoverflow.com/a/5828396/5359531)
+
+```bash
+git submodule update
+
+git submodule foreach git pull
+
+# submodules within submodules
+git submodule foreach --recursive git pull origin master
+```
+
