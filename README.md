@@ -30,3 +30,46 @@ git submodule foreach git pull
 git submodule foreach --recursive git pull origin master
 ```
 
+## bash
+code snippets
+- case statement
+```bash
+case "$string" in 
+    *substring*)
+    # Do stuff
+    ;;
+esac
+```
+- functions
+```bash
+my_function () {
+    local item="$1"
+    printf "This is the item:\n%s\n\n" "$item"
+}
+
+print_div () {
+    local default_message=""
+    local message="${1:-$default_message}"
+    div="-----------------------------------"
+    printf "\n%s\n%s\n" "$div" "$message"
+}
+```
+
+- find ... while read ...
+```bash
+find "$my_dir" -type f -name "*.txt" -print0 | while read -d $'\0' item; do
+    print_div
+    my_function "$item"
+done
+
+```
+- if ... then ... elif ... else
+```bash
+if [ -f "$item" ]; then
+   echo "Its a file"
+elif [ -d "$item" ]; then
+   echo "Its a dir"
+else
+   echo "Not a file or a dir"
+fi
+```
