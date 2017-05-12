@@ -73,3 +73,13 @@ else
    echo "Not a file or a dir"
 fi
 ```
+
+- date
+
+```bash
+# epoch time
+date +%s
+
+#timestamp
+date +"%Y-%m-%d-%H-%M-%S"
+```
