@@ -83,3 +83,14 @@ date +%s
 #timestamp
 date +"%Y-%m-%d-%H-%M-%S"
 ```
+
+- rsync
+  - dry run, verbose output, recursive, use checksums, preserve all metadata, show file progress and maintain partial downloads, copy symlinks as symlinks, login with ssh, exlcude certain files
+```bash
+rsync --dry-run -vrcahPl -e ssh username@server.org:/path/to/data/source /path/to/destination --exclude="*.bam" --exclude="*.fastq.gz"
+```
+
+- scp
+```bash
+scp -vr username@server.org:/path/to/data/source /path/to/destination
+```
