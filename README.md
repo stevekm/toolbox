@@ -38,6 +38,9 @@ case "$string" in
     *substring*)
     # Do stuff
     ;;
+    *)
+    # no match; do other stuff
+    ;;
 esac
 ```
 - functions
@@ -55,6 +58,13 @@ print_div () {
 }
 ```
 
+- while ...
+```bash
+while (( $(ls -1 | wc -l) < 2 )) 
+    do
+        touch "foo_$(date +%s).txt"
+    done
+```
 - find ... while read ...
 ```bash
 find "$my_dir" -type f -name "*.txt" -print0 | while read -d $'\0' item; do
