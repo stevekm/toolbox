@@ -104,3 +104,12 @@ rsync --dry-run -vrcahPl -e ssh username@server.org:/path/to/data/source /path/t
 ```bash
 scp -vr username@server.org:/path/to/data/source /path/to/destination
 ```
+
+- [tee](http://stackoverflow.com/questions/692000/how-do-i-write-stderr-to-a-file-while-using-tee-with-a-pipe)
+```bash
+# stdout and stderr in a single log 
+command 2>&1 | tee -a log
+
+# separate logs for stdout and stderr
+command > >(tee stdout.log) 2> >(tee stderr.log >&2)
+```
