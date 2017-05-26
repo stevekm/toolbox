@@ -113,3 +113,11 @@ command 2>&1 | tee -a log
 # separate logs for stdout and stderr
 command > >(tee stdout.log) 2> >(tee stderr.log >&2)
 ```
+
+Python
+- format string compatibility across Python versions
+```python
+bar = "baz"; print("foo %s" % bar) # 2.6.6, 2.7.3, 3.4.3
+bar = "baz"; print("foo {0}".format(bar)) # 2.6.6, 2.7.3, 3.4.3
+bar = "baz"; print("foo {}".format(bar)) # 2.7.3, 3.4.3
+```
