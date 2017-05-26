@@ -114,7 +114,7 @@ command 2>&1 | tee -a log
 command > >(tee stdout.log) 2> >(tee stderr.log >&2)
 ```
 
-Python
+## Python
 - format string compatibility across Python versions
 ```python
 bar = "baz"; print("foo %s" % bar) # 2.6.6, 2.7.3, 3.4.3
