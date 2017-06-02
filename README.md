@@ -30,6 +30,18 @@ git submodule foreach git pull
 git submodule foreach --recursive git pull origin master
 ```
 
+- Set [email](https://help.github.com/articles/setting-your-email-in-git/) and [username](https://help.github.com/articles/setting-your-username-in-git/) to use with git (e.g. on a new machine)
+
+```bash
+git config --global user.email "email@example.com"
+git config --global user.name "Mona Lisa"
+
+# check
+git config --global user.email
+git config --global user.name
+```
+
+
 ## bash
 code snippets
 - case statement
