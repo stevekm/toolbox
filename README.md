@@ -19,6 +19,12 @@ git push --force
 git checkout <commit_ID> 
 ```
 
+- [Add a submodule](https://github.com/blog/2104-working-with-submodules)
+
+```bash
+git submodule add https://github.com/stevekm/toolbox.git toolbox
+```
+
 - [Update all submodules](http://stackoverflow.com/a/5828396/5359531)
 
 ```bash
