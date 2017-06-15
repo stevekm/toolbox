@@ -55,9 +55,12 @@ def get_file_contents(file):
             lines_list.append(line)
     return(''.join(lines_list))
 
-def mutt_mail(recipient_list, reply_to, subject_line, message, message_file, attachment_files):
+def mutt_mail(recipient_list, reply_to = '', subject_line = '[mutt.py]', message = '~ This message was sent by the mutt.py email script ~', message_file = None, attachment_files = [], return_only_mode = False):
     '''
+    Main control function for the program
     Send the message with mutt
+
+    recipient_list = character string; Format is 'address1@gmail.com, address2@gmail.com'
     '''
     if message_file != None:
         message = get_file_contents(message_file)
@@ -69,34 +72,48 @@ mutt -s "{1}" {2} -- "{3}" <<E0F
 {4}
 E0F'''.format(reply_to, subject_line, attachment_string, recipient_list, message) # message.replace('\n', "$'\n'")
     print('Email command is:\n{0}\n'.format(command))
-    print('Running command, sending email...')
-    subprocess_cmd(command)
+    if return_only_mode == False:
+        print('Running command, sending email...')
+        subprocess_cmd(command)
+    elif return_only_mode == True:
+        return(command)
+
+def run():
+    '''
+    Run the monitoring program
+    arg parsing goes here, if program was run as a script
+    '''
+
+    # ~~~~ GET SCRIPT ARGS ~~~~~~ #
+    parser = argparse.ArgumentParser(description='Mutt email wrapper')
+
+    # required flags
+    parser.add_argument("-r", type = str, required=True, dest = 'recipient_list', metavar = 'recipient_list', help="Email(s) to be included in the recipient list. Format is 'address1@gmail.com, address2@gmail.com' ") # nargs='+'
+
+    # optional positional args
+    parser.add_argument("attachment_files", type = str,  nargs='*', help="Files to be attached to the email") # nargs='+' # default = [],  action='append', nargs='?',
+
+    # optional flags
+    parser.add_argument("-s", default = '[mutt.py]', type = str, dest = 'subject_line', metavar = 'subject_line', help="Subject line for the email")
+    parser.add_argument("-m", default = '~ This message was sent by the mutt.py email script ~', type = str, dest = 'message', metavar = 'message', help="Message for the body of the email")
+    parser.add_argument("-rt", default = '', type = str, dest = 'reply_to', metavar = 'message', help="'Reply To' email address to display in the 'From' field of the email")
+    parser.add_argument("-mf", default = None, type = str, dest = 'message_file', metavar = 'message file', help="File containing text to be included in the message body of the email. Overrides message passed with '-m' argument.")
+
+    parser.add_argument("--norun", default = False, action='store_true', dest = 'return_only_mode',  help="Return the 'mutt' command without running it")
 
 
+    args = parser.parse_args()
 
-# ~~~~ GET SCRIPT ARGS ~~~~~~ #
-parser = argparse.ArgumentParser(description='Mutt email wrapper')
+    recipient_list = args.recipient_list
+    attachment_files = args.attachment_files
+    subject_line = args.subject_line
+    message = args.message
+    message_file = args.message_file
+    reply_to = args.reply_to
+    return_only_mode = args.return_only_mode
 
-# required flags
-parser.add_argument("-r", type = str, required=True, dest = 'recipient_list', metavar = 'recipient_list', help="Email(s) to be included in the recipient list. Format is 'address1@gmail.com, address2@gmail.com' ") # nargs='+'
+    mutt_mail(recipient_list = recipient_list, reply_to = reply_to, subject_line = subject_line, message = message, message_file = message_file, attachment_files = attachment_files, return_only_mode = return_only_mode)
 
-# optional positional args
-parser.add_argument("attachment_files", type = str,  nargs='*', help="Files to be attached to the email") # nargs='+' # default = [],  action='append', nargs='?',
-
-# optional flags
-parser.add_argument("-s", default = '[mutt.py]', type = str, dest = 'subject_line', metavar = 'subject_line', help="Subject line for the email")
-parser.add_argument("-m", default = '~ This message was sent by the mutt.py email script ~', type = str, dest = 'message', metavar = 'message', help="Message for the body of the email")
-parser.add_argument("-rt", default = '', type = str, dest = 'reply_to', metavar = 'message', help="'Reply To' email address to display in the 'From' field of the email")
-parser.add_argument("-mf", default = None, type = str, dest = 'message_file', metavar = 'message file', help="File containing text to be included in the message body of the email. Overrides message passed with '-m' argument.")
-
-args = parser.parse_args()
-
-recipient_list = args.recipient_list
-attachment_files = args.attachment_files
-subject_line = args.subject_line
-message = args.message
-message_file = args.message_file
-reply_to = args.reply_to
 
 if __name__ == "__main__":
-    mutt_mail(recipient_list = recipient_list, reply_to = reply_to, subject_line = subject_line, message = message, message_file = message_file, attachment_files = attachment_files)
+    run()
