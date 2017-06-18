@@ -55,7 +55,7 @@ def get_file_contents(file):
             lines_list.append(line)
     return(''.join(lines_list))
 
-def mutt_mail(recipient_list, reply_to = '', subject_line = '[mutt.py]', message = '~ This message was sent by the mutt.py email script ~', message_file = None, attachment_files = [], return_only_mode = False):
+def mutt_mail(recipient_list, reply_to = '', subject_line = '[mutt.py]', message = '~ This message was sent by the mutt.py email script ~', message_file = None, attachment_files = [], return_only_mode = False, quiet = False):
     '''
     Main control function for the program
     Send the message with mutt
@@ -71,9 +71,9 @@ export EMAIL="{0}"
 mutt -s "{1}" {2} -- "{3}" <<E0F
 {4}
 E0F'''.format(reply_to, subject_line, attachment_string, recipient_list, message) # message.replace('\n', "$'\n'")
-    print('Email command is:\n{0}\n'.format(command))
+    if quiet == False: print('Email command is:\n{0}\n'.format(command))
     if return_only_mode == False:
-        print('Running command, sending email...')
+        if quiet == False: print('Running command, sending email...')
         subprocess_cmd(command)
     elif return_only_mode == True:
         return(command)
@@ -100,6 +100,7 @@ def run():
     parser.add_argument("-mf", default = None, type = str, dest = 'message_file', metavar = 'message file', help="File containing text to be included in the message body of the email. Overrides message passed with '-m' argument.")
 
     parser.add_argument("--norun", default = False, action='store_true', dest = 'return_only_mode',  help="Return the 'mutt' command without running it")
+    parser.add_argument("--quiet", default = False, action='store_true', dest = 'quiet',  help="Dont print the command being run")
 
 
     args = parser.parse_args()
@@ -111,8 +112,9 @@ def run():
     message_file = args.message_file
     reply_to = args.reply_to
     return_only_mode = args.return_only_mode
+    quiet = args.quiet
 
-    mutt_mail(recipient_list = recipient_list, reply_to = reply_to, subject_line = subject_line, message = message, message_file = message_file, attachment_files = attachment_files, return_only_mode = return_only_mode)
+    mutt_mail(recipient_list = recipient_list, reply_to = reply_to, subject_line = subject_line, message = message, message_file = message_file, attachment_files = attachment_files, return_only_mode = return_only_mode, quiet = quiet)
 
 
 if __name__ == "__main__":
