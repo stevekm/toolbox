@@ -47,6 +47,17 @@ git config --global user.email
 git config --global user.name
 ```
 
+- Change the URL to a remote 
+
+```bash
+git remote set-url origin git@github.com:stevekm/sns-wes-coverage-analysis.git
+```
+
+- Add a remote to a git repo
+
+```bash
+git remote add clinical git@github.com:NYU-Molecular-Pathology/sns-wes-coverage-analysis.git
+```
 
 ## bash
 code snippets
