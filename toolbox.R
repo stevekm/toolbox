@@ -52,3 +52,8 @@ sysinfo <- function(){
     print(Sys.info())
 }
 
+mytime <- function(){
+    if( ! exists('mycat')) mycat <- function(text){cat(gsub(pattern = "\n", replacement = "  \n", x = text))}
+    mycat(sprintf("Time: %s", date()))
+}
+
