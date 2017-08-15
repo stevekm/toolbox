@@ -143,6 +143,11 @@ command 2>&1 | tee -a log
 command > >(tee stdout.log) 2> >(tee stderr.log >&2)
 ```
 
+- [copy directory tree](https://serverfault.com/a/204320/346367)
+```bash
+rsync --dry-run -vah --include="*/" --exclude="*"  /path/to/source /path/to/target
+```
+
 ## Python
 - format string compatibility across Python versions
 ```python
