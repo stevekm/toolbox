@@ -1,5 +1,25 @@
 #!/usr/bin/env Rscript
 
+tsprintf <- function(fmt, ...){
+    # print a formatted message with timestamp
+    m <- sprintf(fmt, ...)
+    message(sprintf('[%s] %s', format(Sys.time(), "%H:%M:%S"), m))
+}
+
+remove_empty_str <- function(x){
+    # remove empty strings from character vector
+    x <- x[which(! x %in% "")]
+    return(x)
+}
+
+get_numlines <- function(input_file, skip = NA) {
+    # count the number of lines in a file
+    # skip = integer number to subtract from line count e.g. to skip header (doesn't actually prevent lines from being read)
+    num_lines <- length(readLines(input_file))
+    if(!is.na(skip)) num_lines <- num_lines - as.numeric(skip)
+    return(num_lines)
+}
+
 msprintf <- function(fmt, ...) {
     message(sprintf(fmt, ...))
 }
@@ -23,6 +43,33 @@ sort_bed_df <- function(df){
     df <- df[! duplicated(df), ]
     return(df)
 }
+
+chrom_rownames2cols <- function(df){
+    # split rownames into separate columns for chromosome coordinates
+    # chr10:100026989-100027328
+    df_chrom <- as.data.frame(do.call(rbind, strsplit(rownames(df), ':')))
+    df_chrom <- cbind(df_chrom[1], as.data.frame(do.call(rbind, strsplit(as.character(df_chrom$V2), '-'))))
+    colnames(df_chrom) <- c("chrom", "start", "stop")
+    df <- cbind(df_chrom, df)
+    return(df)
+}
+
+sanitize_SQLite_colnames <- function(df){
+    # clean the column names in a dataframe for use in SQLite
+    bad_chars <- c('.', '-')
+    for(bad_char in bad_chars){
+        colnames(df) <- gsub(pattern = bad_char, replacement = '_', x = colnames(df), fixed = TRUE)
+    }
+    return(df)
+}
+
+add_uid <- function(df){
+    # add a unique ID column 'uid' to a dataframe
+    library("digest")
+    df[["uid"]] <- apply(X = df, MARGIN = 1, digest)
+    return(df)
+}
+
 
 sysinfo <- function(){
     # print custom information about the system
