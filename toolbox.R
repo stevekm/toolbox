@@ -104,3 +104,13 @@ mytime <- function(){
     mycat(sprintf("Time: %s", date()))
 }
 
+
+concat_df <- function(df1, df2){
+    # rbind two df's, check that the first one has rows
+    if(nrow(df1) < 1){
+        df <- df2
+    } else {
+        df <- rbind(df1, df2)
+    }
+    return(df)
+}
