@@ -59,6 +59,17 @@ git remote set-url origin git@github.com:stevekm/sns-wes-coverage-analysis.git
 git remote add clinical git@github.com:NYU-Molecular-Pathology/sns-wes-coverage-analysis.git
 ```
 
+- [Clean up merged branches](https://stackoverflow.com/a/24558813/5359531)
+
+```bash
+# clean local branches
+git branch --merged | grep -v 'master\|dev' | xargs git branch -d
+
+# clean remote branches
+git branch -r --merged | grep -v 'master\|dev' |  sed 's/origin\///' | xargs git push --delete origin
+
+```
+
 ## bash
 code snippets
 - case statement
