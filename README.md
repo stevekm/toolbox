@@ -134,6 +134,12 @@ date +%s
 date +"%Y-%m-%d-%H-%M-%S"
 ```
 
+- find and ignore error messages
+
+```bash
+find / 2>/dev/null
+```
+
 - rsync
   - dry run, verbose output, recursive, use checksums, preserve all metadata, show file progress and maintain partial downloads, copy symlinks as symlinks, login with ssh, exlcude certain files
 ```bash
