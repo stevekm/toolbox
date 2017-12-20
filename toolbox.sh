@@ -18,3 +18,20 @@ spinner()
     done
     printf "    \b\b\b\b"
 }
+
+
+sleep_counter=0 # counter to track `sleep_count`
+sleep_limit=200 # the value for `sleep_count` sleep on
+
+sleep_count () {
+    # pause a script after the `sleep_count` function has been invoked a certain number of times
+    local sleep_limit="$sleep_limit"
+
+    if [ "$sleep_counter" -eq "$sleep_limit" ] ; then
+        printf "\n\nLimit reached. Sleeping....\n\n" 
+        sleep 2
+        sleep_counter=0
+    else
+        sleep_counter=$((sleep_counter+1))
+    fi
+}
