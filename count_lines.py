@@ -3,7 +3,6 @@
 """
 Counts the number of lines in all files passed
 """
-import os
 import argparse
 
 
@@ -82,9 +81,6 @@ def run():
     parser.add_argument("-v", "--verbose", default = False, action='store_true', dest = 'verbose', help="print the number of lines per file")
 
     args = parser.parse_args()
-
-    files = args.files
-    headers = args.headers
 
     main(**vars(args))
 
