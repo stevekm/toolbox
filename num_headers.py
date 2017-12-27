@@ -71,7 +71,7 @@ def run():
 
         find output/ -maxdepth 2 -name "*_summary.tsv" ! -name "*IonXpress_*" | xargs toolbox/num_headers.py
     """
-    parser = argparse.ArgumentParser(description='This script will check that all files have the same header (1st line)')
+    parser = argparse.ArgumentParser(description='This script will count the number of unique headers (1st line) amongs all files')
 
     # positional args
     parser.add_argument("files", help="Paths to input files", nargs="+")
