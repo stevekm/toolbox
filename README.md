@@ -165,6 +165,16 @@ command > >(tee stdout.log) 2> >(tee stderr.log >&2)
 rsync --dry-run -vah --include="*/" --exclude="*"  /path/to/source /path/to/target
 ```
 
+- tar
+
+```bash
+# create an archive
+tar -zcvf new_archive.tar.gz /path/to/some_file_or_dir
+
+# extract archive
+tar -vxzf new_archive.tar.gz
+```
+
 ## Python
 - format string compatibility across Python versions
 ```python
