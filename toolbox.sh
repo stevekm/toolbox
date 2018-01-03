@@ -25,6 +25,7 @@ sleep_limit=200 # the value for `sleep_count` sleep on
 
 sleep_count () {
     # pause a script after the `sleep_count` function has been invoked a certain number of times
+    # NOTE: does not work with loops that include pipes; https://serverfault.com/a/259342/346367
     local sleep_limit="$sleep_limit"
 
     if [ "$sleep_counter" -eq "$sleep_limit" ] ; then
