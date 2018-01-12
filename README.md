@@ -182,3 +182,10 @@ bar = "baz"; print("foo %s" % bar) # 2.6.6, 2.7.3, 3.4.3
 bar = "baz"; print("foo {0}".format(bar)) # 2.6.6, 2.7.3, 3.4.3
 bar = "baz"; print("foo {}".format(bar)) # 2.7.3, 3.4.3
 ```
+
+## Docker
+- To run a Docker base image directly:
+
+```bash
+docker run --privileged --rm -ti debian:jessie /bin/bash
+```
