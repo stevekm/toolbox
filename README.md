@@ -71,7 +71,11 @@ git branch -r --merged | grep -v 'master\|dev' |  sed 's/origin\///' | xargs git
 ```
 
 ## bash
-code snippets
+
+- parameter expansion & subsitution
+
+![](bash_parameter_substitution.png)
+
 - case statement
 ```bash
 case "$string" in 
