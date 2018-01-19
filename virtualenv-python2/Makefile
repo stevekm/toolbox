@@ -1,7 +1,7 @@
 # setup a virtual environment in Python 2.7 and install dependecies with pip
 
-# no default action
-none:
+# default action
+all: setup
 
 # create the environment
 venv/bin/activate:
@@ -16,5 +16,5 @@ setup: venv/bin/activate
 	pip install -r requirements.txt
 
 clean:
-	unlink activate
 	rm -rf venv
+	unlink activate

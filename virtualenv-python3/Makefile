@@ -1,9 +1,9 @@
 # setup a virtual environment in Python 3.6 and install dependecies with pip
 
 # no default action
-none:
+all: setup
 
-# setup the virtual environment
+# create the environment
 venv/bin/activate:
 	set -x && \
 	unset PYTHONPATH && \
