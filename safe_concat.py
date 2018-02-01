@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 """
 Concatenates table files but checks to make sure they have the same number of headers first
+
+Usage example:
+find -L . -maxdepth 3 -type f -name "VCF-GATK-HC-annot.all.txt" | xargs ./toolbox/safe_concat.py > VCF-GATK-HC-annot.all.concat.txt
 """
 import argparse
 import num_headers
