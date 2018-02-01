@@ -13,7 +13,6 @@ def main(file_list, output_file):
     """
     # check the number of headers to make sure theres only 1
     num = num_headers.main(files = file_list)
-    print(num)
     if num != 1:
         print("ERROR: There is more than 1 header between the files")
         raise

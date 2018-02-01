@@ -31,13 +31,11 @@ def get_lines(file_list):
 
     """
     with open(file_list[0]) as f:
-        print("reading from file: {0}".format(file_list[0]))
         for line in f:
             yield(line)
             break
     for input_file in file_list:
         with open(input_file) as f:
-            print("reading from file: {0}".format(input_file))
             next(f)
             for line in f:
                 yield(line)
