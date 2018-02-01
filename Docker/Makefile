@@ -1,4 +1,4 @@
-# Makefile for easy Docker development
+# Makefile template for easy Docker development
 none:
 
 build:
