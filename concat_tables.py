@@ -2,11 +2,11 @@
 # python 2.7
 
 '''
-USAGE: 
+USAGE:
 FILES="$(find some_dir/ -name "*file.tsv")"
 concat_tables.py $FILES > output_table.tsv
 
-DESCRIPTION: This script will concatenate multiple flat text 
+DESCRIPTION: This script will concatenate multiple flat text
 based tables which have a common 1-line header
 
 bash equivalent:
@@ -16,72 +16,66 @@ $ for i in $FILES; do tail -n +2 "$i" >> test_output.tsv; done
 
 # ~~~~ LOAD PACKAGES ~~~~~~ #
 import sys
-import os
-import errno
-import re
 import argparse
 
 # ~~~~ CUSTOM FUNCTIONS ~~~~~~ #
-def my_debugger():
-    # starts interactive Python terminal at location in script
-    # call with my_debugger() anywhere in your script
-    import readline # optional, will allow Up/Down/History in the console
-    import code
-    vars = globals().copy()
-    vars.update(locals())
-    shell = code.InteractiveConsole(vars)
-    shell.interact()
-
-def initialize_file(string, output_file):
-    # write string to file, overwriting contents
-    with open(output_file, "w") as myfile:
-        myfile.write(string + '\n')
-
 def append_string(string, output_file):
-    # append string to file
-    # append_string(get_file_lines(header_file, [1]), output_file)
+    '''
+    append string to file
+    '''
     with open(output_file, "a") as myfile:
         myfile.write(string + '\n')
+def get_lines(file_list):
+    """
+    Print the first line from the first file, then print all lines except the first from all subsequent files
 
-def get_file_lines(file, line_nums_list):
-    # return a list of lines from file matching list of line indexes
-  return [x for i, x in enumerate(open(file)) if i in line_nums_list]
-
-def count_file_lines(file):
-    # count the number of lines in the file
-    return sum(1 for line in open(file))
-
-def print_header_to_output(header_file):
-    # get the first line from file and print it to stdout
-    line_nums_list = [0]
-    sys.stdout.write(get_file_lines(file = header_file, line_nums_list = line_nums_list)[0])
-
-def print_file_minus_header(file):
-    # print all lines in file except for header line
-    num_lines = count_file_lines(file)
-    for line in get_file_lines(file = file, line_nums_list = range(1, num_lines)):
-        sys.stdout.write(line)
+    """
+    with open(file_list[0]) as f:
+        print("reading from file: {0}".format(file_list[0]))
+        for line in f:
+            yield(line)
+            break
+    for input_file in file_list:
+        with open(input_file) as f:
+            print("reading from file: {0}".format(input_file))
+            next(f)
+            for line in f:
+                yield(line)
 
 
+def main(file_list, output_file = False):
+    """
+    Main control function for the program. Concatenates all files passed and prints output to stdout
 
-# ~~~~ GET SCRIPT ARGS ~~~~~~ #
-parser = argparse.ArgumentParser(description='This script will concatenate multiple table files with a common header')
+    Parameters
+    ----------
+    file_list: list
+        list of paths to files to be concatenated
+    """
+    for line in get_lines(file_list):
+        if output_file:
+            append_string(string = line, output_file = output_file)
+        else:
+            sys.stdout.write(line)
 
-# positional args
-parser.add_argument("file_list", help="Paths to input table files", nargs="+")
+def parse():
+    """
+    parse script args and pass them to `main`
+    """
+    # ~~~~ GET SCRIPT ARGS ~~~~~~ #
+    parser = argparse.ArgumentParser(description='This script will concatenate multiple table files with a common header')
 
-# optional args
-# parser.add_argument("-o", default = "output.txt", type = str, dest = 'output_file', metavar = 'Table output file', help="Path to the output table file")
+    # positional args
+    parser.add_argument("file_list", help="Paths to input table files", nargs="+")
 
-args = parser.parse_args()
+    # optional args
+    parser.add_argument("-o", default = False, dest = 'output_file', metavar = 'Table output file', help="Path to the output table file")
 
-file_list = args.file_list
-# output_file = args.output_file
+    args = parser.parse_args()
+
+    file_list = args.file_list
+    output_file = args.output_file
+    main(file_list, output_file)
 
 if __name__ == "__main__":
-    # print header from the first file
-    print_header_to_output(header_file = file_list[0])
-    # print all lines except header from all other files
-    for file in file_list:
-        print_file_minus_header(file = file)
-
+    parse()
