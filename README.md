@@ -193,3 +193,24 @@ bar = "baz"; print("foo {}".format(bar)) # 2.7.3, 3.4.3
 ```bash
 docker run --privileged --rm -ti debian:jessie /bin/bash
 ```
+## Makefile
+
+- set the default shell to use
+
+```
+SHELL:=/bin/bash
+```
+
+- Makefile vs. shell variable expansion 
+
+```
+HG19_GENOME_FA_MD5:=c1ddcc5db31b657d167bea6d9ff354f9
+ref-data:
+	echo "$(HG19_GENOME_FA_MD5) ${HG19_GENOME_FA_MD5} $${HG19_GENOME_FA_MD5:=none}"
+```
+output:
+```bash
+$ make ref-data
+echo "c1ddcc5db31b657d167bea6d9ff354f9 c1ddcc5db31b657d167bea6d9ff354f9 ${HG19_GENOME_FA_MD5:=none}"
+c1ddcc5db31b657d167bea6d9ff354f9 c1ddcc5db31b657d167bea6d9ff354f9 none
+```
