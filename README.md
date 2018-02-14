@@ -179,6 +179,12 @@ tar -zcvf new_archive.tar.gz /path/to/some_file_or_dir
 tar -vxzf new_archive.tar.gz
 ```
 
+- md5 entire directory
+
+```bash
+for file in $(find . -type f ! -name "*.md5.txt"); do echo "$file"; md5sum "${file}" > "${file}.md5.txt"; done
+```
+
 ## Python
 - format string compatibility across Python versions
 ```python
