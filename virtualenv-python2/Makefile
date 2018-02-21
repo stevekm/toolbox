@@ -10,6 +10,9 @@ venv/bin/activate:
 	virtualenv venv --no-site-packages &&\
 	ln -s venv/bin/activate
 
+# if that does not work try this
+# export PYTHONPATH= && \
+
 # install the dependencies
 setup: venv/bin/activate
 	source venv/bin/activate && \
