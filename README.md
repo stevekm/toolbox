@@ -117,6 +117,12 @@ find "$my_dir" -type f -name "*.txt" -print0 | while read -d $'\0' item; do
 done
 
 ```
+
+- find ... xargs ...
+```bash
+find . -name "*.mp3" -print0 | xargs -0 mplayer
+```
+
 - if ... then ... elif ... else
 ```bash
 if [ -f "$item" ]; then
