@@ -191,6 +191,18 @@ tar -vxzf new_archive.tar.gz
 for file in $(find . -type f ! -name "*.md5.txt"); do echo "$file"; md5sum "${file}" > "${file}.md5.txt"; done
 ```
 
+- list files in archive before downloading
+
+```
+wget ftp://igenome:G3nom3s4u@ussd-ftp.illumina.com/Homo_sapiens/UCSC/hg19/Homo_sapiens_UCSC_hg19.tar.gz -O- | tar -ztvf - > tar_contents.txt
+```
+
+- extract select files from large archive download
+
+```
+wget ftp://igenome:G3nom3s4u@ussd-ftp.illumina.com/Homo_sapiens/UCSC/hg19/Homo_sapiens_UCSC_hg19.tar.gz -O- | tar -zxvf - Homo_sapiens/UCSC/hg19/Sequence/WholeGenomeFasta/genome.fa
+```
+
 ## Python
 - format string compatibility across Python versions
 ```python
