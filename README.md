@@ -238,3 +238,21 @@ $ make ref-data
 echo "c1ddcc5db31b657d167bea6d9ff354f9 c1ddcc5db31b657d167bea6d9ff354f9 ${HG19_GENOME_FA_MD5:=none}"
 c1ddcc5db31b657d167bea6d9ff354f9 c1ddcc5db31b657d167bea6d9ff354f9 none
 ```
+
+- recursive recipe invocation + dynamic recipes from some source criteria for parallel processing (`make do-thing -j4`)
+
+```
+SAMPLES=$(shell tail -n +2 "samples.csv")
+
+do-thing:
+	$(MAKE) do-thing-recurse
+
+do-thing-recurse: $(SAMPLES)
+
+$(SAMPLES):
+	@sampleID="$$(echo "$@" | cut -d ',' -f1)" ; \
+	runID="$$(echo "$@" | cut -d ',' -f2)" ; \
+	echo ">>> Doing a thing for runID: $${runID} sampleID: $${sampleID}" ; \
+	./do-my-things.sh "$${runID}" "$${sampleID}"
+.PHONY: $(SAMPLES)
+```
