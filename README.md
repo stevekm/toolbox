@@ -86,6 +86,14 @@ case "$string" in
     # no match; do other stuff
     ;;
 esac
+
+case "$0" in
+    -bash|bash|*/bash) echo "do a thing for bash" ;;
+    -ksh|ksh|*/ksh) echo "do a thing for ksh" ;;
+    -zsh|zsh|*/zsh) echo "do a thing for zsh" ;;
+    *) echo "do some other default action" ;; # sh and default for scripts
+esac
+
 ```
 - functions
 ```bash
