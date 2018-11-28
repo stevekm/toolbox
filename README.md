@@ -74,7 +74,73 @@ git branch -r --merged | grep -v 'master\|dev' |  sed 's/origin\///' | xargs git
 
 - parameter expansion & subsitution
 
-![](bash_parameter_substitution.png)
+<table style="width:100%;">
+
+<tr>
+<th></th>
+<th><em>parameter</em><br>Set and Not Null</th>
+<th><em>parameter</em><br>Set But Null</th>
+<th><em>parameter</em><br>Unset</th>
+</tr>
+
+<tr>
+<td><pre>${parameter:-word}</pre></td>
+<td>substitute <pre>parameter</pre></td>
+<td>substitute <pre>word</pre></td>
+<td>substitute <pre>word</pre></td>
+</tr>
+
+<tr>
+<td><pre>${parameter-word}</pre></td>
+<td>substitute <pre>parameter</pre></td>
+<td>substitute <pre>null</pre></td>
+<td>substitute <pre>word</pre></td>
+</tr>
+
+<tr>
+<td><pre>${parameter:=word}</pre></td>
+<td>substitute <pre>parameter</pre></td>
+<td>assign <pre>word</pre></td>
+<td>assign <pre>word</pre></td>
+</tr>
+
+<tr>
+<td><pre>${parameter=word}</pre></td>
+<td>substitute <pre>parameter</pre></td>
+<td>substitute <pre>null</pre></td>
+<td>assign <pre>word</pre></td>
+</tr>
+
+<tr>
+<td><pre>${parameter:?word}</pre></td>
+<td>substitute <pre>parameter</pre></td>
+<td>error, exit</td>
+<td>error, exit</td>
+</tr>
+
+<tr>
+<td><pre>${parameter?word}</pre></td>
+<td>substitute <pre>parameter</pre></td>
+<td>substitute <pre>null</pre></td>
+<td>error, exit</td>
+</tr>
+
+<tr>
+<td><pre>${parameter:+word}</pre></td>
+<td>substitute <pre>word</pre></td>
+<td>substitute <pre>null</pre></td>
+<td>substitute <pre>null</pre></td>
+</tr>
+
+<tr>
+<td><pre>${parameter+word}</pre></td>
+<td>substitute <pre>word</pre></td>
+<td>substitute <pre>word</pre></td>
+<td>substitute <pre>null</pre></td>
+</tr>
+
+</table>
+
 
 - case statement
 ```bash
