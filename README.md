@@ -350,6 +350,7 @@ squeue -u $USER -o "%T %C" | grep "RUNNING" | cut -d " " -f2 | paste -sd+ | bc
 ```
 sinfo -N -O nodelist,partition,statelong,cpusstate,memory,freemem
 sinfo -N --format="%15N %15T %15C %15e %5T"
+```
 
 - find a partition with idle nodes; exlcude 'data_mover' and 'dev' partitions
 
