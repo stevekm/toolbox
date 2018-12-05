@@ -330,3 +330,35 @@ $(SAMPLES):
 	./do-my-things.sh "$${runID}" "$${sampleID}"
 .PHONY: $(SAMPLES)
 ```
+
+# SLURM
+
+- all jobs running for current user
+
+```
+squeue -u $USER -o '%10i %15P %10T %10M %10S %12l %3C %15R %25j' --long
+```
+
+- total number of CPU's allocated across all jobs
+
+```
+squeue -u $USER -o "%T %C" | grep "RUNNING" | cut -d " " -f2 | paste -sd+ | bc
+```
+
+- load of all nodes across all partitions
+
+```
+sinfo -N -O nodelist,partition,statelong,cpusstate,memory,freemem
+sinfo -N --format="%15N %15T %15C %15e %5T"
+
+- find a partition with idle nodes; exlcude 'data_mover' and 'dev' partitions
+
+```
+sinfo -N -O nodelist,partition,statelong | grep 'idle' | grep -v 'data_mover' | grep -v 'dev' | tr -s '[:space:]' | cut -d ' ' -f2 | sort -u | head -1
+```
+
+- detect which 'mixed' queue has the most open nodes
+
+```
+sinfo -N -O nodelist,partition,statelong | grep 'mixed' | grep -v 'data_mover' | grep -v 'dev' | tr -s '[:space:]' | cut -d ' ' -f2 | sort | uniq -c | sort -k 1nr | head -1 | tr -s '[:space:]' | cut -d ' ' -f3
+```
