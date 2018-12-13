@@ -363,3 +363,35 @@ sinfo -N -O nodelist,partition,statelong | grep 'idle' | grep -v 'data_mover' | 
 ```
 sinfo -N -O nodelist,partition,statelong | grep 'mixed' | grep -v 'data_mover' | grep -v 'dev' | tr -s '[:space:]' | cut -d ' ' -f2 | sort | uniq -c | sort -k 1nr | head -1 | tr -s '[:space:]' | cut -d ' ' -f3
 ```
+
+- submit jobs with `sbatch`
+
+```
+# bash
+printf "#!/bin/bash\n
+echo foo" | sbatch -D "${PWD}" -o "%j.out" -J "myjob" -p "cpu_short" --ntasks-per-node=1 -c "1" /dev/stdin
+
+sbatch -D "${PWD}" -o "%j.out" -J "myjob" -p "cpu_short" --ntasks-per-node=1 -c "1" <<E0F
+#!/bin/bash
+echo foo
+E0F
+
+sbatch -D "${PWD}" -o "%j.out" -J "myjob" -p "cpu_short" --ntasks-per-node=1 -c "1" --wrap="echo foo"
+
+sbatch -D "${PWD}" -o "%j.out" -J "myjob" -p "cpu_short" --ntasks-per-node=1 -c "1" --wrap="bash -c 'echo foo'"
+
+# capture job ID after submission
+sbatch -D "${PWD}" -o "%j.out" -J "myjob" -p "cpu_short" my_script.sh | tee >(sed 's|[^[:digit:]]*\([[:digit:]]*\).*|\1|' > job.id )
+
+# Makefile
+submit:
+	printf "#!/bin/bash\n \
+echo foo" | sbatch -D "$${PWD}" -o "%j.out" -J "myjob" -p "cpu_short" --ntasks-per-node=1 -c "1" /dev/stdin
+
+```
+
+- submit with `srun`
+
+```
+srun -D "$PWD" --output "slurm-%j.out" --input none -p "cpu_short" --ntasks-per-node=1 -c "1" bash -c 'some_command'
+```
