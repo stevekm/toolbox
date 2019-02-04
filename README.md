@@ -277,6 +277,12 @@ wget ftp://igenome:G3nom3s4u@ussd-ftp.illumina.com/Homo_sapiens/UCSC/hg19/Homo_s
 wget ftp://igenome:G3nom3s4u@ussd-ftp.illumina.com/Homo_sapiens/UCSC/hg19/Homo_sapiens_UCSC_hg19.tar.gz -O- | tar -zxvf - Homo_sapiens/UCSC/hg19/Sequence/WholeGenomeFasta/genome.fa
 ```
 
+- check which version operating system you are using (Linux)
+
+```
+cat /etc/*release
+```
+
 ## Python
 - format string compatibility across Python versions
 ```python
