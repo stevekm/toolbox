@@ -296,7 +296,10 @@ bar = "baz"; print("foo {}".format(bar)) # 2.7.3, 3.4.3
 
 ```bash
 docker run --privileged --rm -ti debian:jessie /bin/bash
+
+docker run --rm -ti ubuntu:16.04 /bin/bash
 ```
+
 ## Makefile
 
 - set the default shell to use
