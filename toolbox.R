@@ -114,3 +114,12 @@ concat_df <- function(df1, df2){
     }
     return(df)
 }
+
+all_equal <- function(...){
+    # returns TRUE or FALSE if all the elements passed are equal
+    arguments <- list(...)
+    TF <- vapply(1:(length(arguments)-1),
+                 function(n) identical(arguments[[n]], arguments[[n+1]]),
+                 logical(1))
+    return(all(TF))
+}

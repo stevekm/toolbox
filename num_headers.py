@@ -41,10 +41,13 @@ def main(**kwargs):
     -----------------
     files: list
         a list of file paths
+    keep_none: bool
+        include files with no lines in the count (default: 'False')
     """
     # get the args that were passed
     files = kwargs.pop('files', [])
     keep_none = kwargs.pop('keep_none', False)
+    verbose = kwargs.pop('verbose', False)
 
     # hold all the headers in a dict with counter
     headers = defaultdict(int)
@@ -59,7 +62,9 @@ def main(**kwargs):
 
     num_headers = len(headers.keys())
 
-    print(num_headers)
+    if verbose:
+        print(num_headers)
+    return(num_headers)
 
 def run():
     """
@@ -78,6 +83,7 @@ def run():
 
     # optional args
     parser.add_argument("--keep-none", default = False, action='store_true', dest = 'keep_none', help="Whether or not to count empty files")
+    parser.add_argument("-v", "--verbose", default = True, action='store_false', dest = 'verbose', help="Whether or not to print the number of lines to console")
 
     args = parser.parse_args()
 

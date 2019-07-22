@@ -71,7 +71,77 @@ git branch -r --merged | grep -v 'master\|dev' |  sed 's/origin\///' | xargs git
 ```
 
 ## bash
-code snippets
+
+- parameter expansion & subsitution
+
+<table style="width:100%;">
+
+<tr>
+<th></th>
+<th><em>parameter</em><br>Set and Not Null</th>
+<th><em>parameter</em><br>Set But Null</th>
+<th><em>parameter</em><br>Unset</th>
+</tr>
+
+<tr>
+<td><pre>${parameter:-word}</pre></td>
+<td>substitute <pre>parameter</pre></td>
+<td>substitute <pre>word</pre></td>
+<td>substitute <pre>word</pre></td>
+</tr>
+
+<tr>
+<td><pre>${parameter-word}</pre></td>
+<td>substitute <pre>parameter</pre></td>
+<td>substitute <pre>null</pre></td>
+<td>substitute <pre>word</pre></td>
+</tr>
+
+<tr>
+<td><pre>${parameter:=word}</pre></td>
+<td>substitute <pre>parameter</pre></td>
+<td>assign <pre>word</pre></td>
+<td>assign <pre>word</pre></td>
+</tr>
+
+<tr>
+<td><pre>${parameter=word}</pre></td>
+<td>substitute <pre>parameter</pre></td>
+<td>substitute <pre>null</pre></td>
+<td>assign <pre>word</pre></td>
+</tr>
+
+<tr>
+<td><pre>${parameter:?word}</pre></td>
+<td>substitute <pre>parameter</pre></td>
+<td>error, exit</td>
+<td>error, exit</td>
+</tr>
+
+<tr>
+<td><pre>${parameter?word}</pre></td>
+<td>substitute <pre>parameter</pre></td>
+<td>substitute <pre>null</pre></td>
+<td>error, exit</td>
+</tr>
+
+<tr>
+<td><pre>${parameter:+word}</pre></td>
+<td>substitute <pre>word</pre></td>
+<td>substitute <pre>null</pre></td>
+<td>substitute <pre>null</pre></td>
+</tr>
+
+<tr>
+<td><pre>${parameter+word}</pre></td>
+<td>substitute <pre>word</pre></td>
+<td>substitute <pre>word</pre></td>
+<td>substitute <pre>null</pre></td>
+</tr>
+
+</table>
+
+
 - case statement
 ```bash
 case "$string" in 
@@ -82,6 +152,14 @@ case "$string" in
     # no match; do other stuff
     ;;
 esac
+
+case "$0" in
+    -bash|bash|*/bash) echo "do a thing for bash" ;;
+    -ksh|ksh|*/ksh) echo "do a thing for ksh" ;;
+    -zsh|zsh|*/zsh) echo "do a thing for zsh" ;;
+    *) echo "do some other default action" ;; # sh and default for scripts
+esac
+
 ```
 - functions
 ```bash
@@ -113,6 +191,12 @@ find "$my_dir" -type f -name "*.txt" -print0 | while read -d $'\0' item; do
 done
 
 ```
+
+- find ... xargs ...
+```bash
+find . -name "*.mp3" -print0 | xargs -0 mplayer
+```
+
 - if ... then ... elif ... else
 ```bash
 if [ -f "$item" ]; then
@@ -175,6 +259,30 @@ tar -zcvf new_archive.tar.gz /path/to/some_file_or_dir
 tar -vxzf new_archive.tar.gz
 ```
 
+- md5 entire directory
+
+```bash
+for file in $(find . -type f ! -name "*.md5.txt"); do echo "$file"; md5sum "${file}" > "${file}.md5.txt"; done
+```
+
+- list files in archive before downloading
+
+```
+wget ftp://igenome:G3nom3s4u@ussd-ftp.illumina.com/Homo_sapiens/UCSC/hg19/Homo_sapiens_UCSC_hg19.tar.gz -O- | tar -ztvf - > tar_contents.txt
+```
+
+- extract select files from large archive download
+
+```
+wget ftp://igenome:G3nom3s4u@ussd-ftp.illumina.com/Homo_sapiens/UCSC/hg19/Homo_sapiens_UCSC_hg19.tar.gz -O- | tar -zxvf - Homo_sapiens/UCSC/hg19/Sequence/WholeGenomeFasta/genome.fa
+```
+
+- check which version operating system you are using (Linux)
+
+```
+cat /etc/*release
+```
+
 ## Python
 - format string compatibility across Python versions
 ```python
@@ -188,4 +296,111 @@ bar = "baz"; print("foo {}".format(bar)) # 2.7.3, 3.4.3
 
 ```bash
 docker run --privileged --rm -ti debian:jessie /bin/bash
+
+docker run --rm -ti ubuntu:16.04 /bin/bash
+```
+
+## Makefile
+
+- set the default shell to use
+
+```
+SHELL:=/bin/bash
+```
+
+- Makefile vs. shell variable expansion 
+
+```
+HG19_GENOME_FA_MD5:=c1ddcc5db31b657d167bea6d9ff354f9
+ref-data:
+	echo "$(HG19_GENOME_FA_MD5) ${HG19_GENOME_FA_MD5} $${HG19_GENOME_FA_MD5:=none}"
+```
+output:
+```bash
+$ make ref-data
+echo "c1ddcc5db31b657d167bea6d9ff354f9 c1ddcc5db31b657d167bea6d9ff354f9 ${HG19_GENOME_FA_MD5:=none}"
+c1ddcc5db31b657d167bea6d9ff354f9 c1ddcc5db31b657d167bea6d9ff354f9 none
+```
+
+- recursive recipe invocation + dynamic recipes from some source criteria for parallel processing (`make do-thing -j4`)
+
+```
+SAMPLES=$(shell tail -n +2 "samples.csv")
+
+do-thing:
+	$(MAKE) do-thing-recurse
+
+do-thing-recurse: $(SAMPLES)
+
+$(SAMPLES):
+	@sampleID="$$(echo "$@" | cut -d ',' -f1)" ; \
+	runID="$$(echo "$@" | cut -d ',' -f2)" ; \
+	echo ">>> Doing a thing for runID: $${runID} sampleID: $${sampleID}" ; \
+	./do-my-things.sh "$${runID}" "$${sampleID}"
+.PHONY: $(SAMPLES)
+```
+
+# SLURM
+
+- all jobs running for current user
+
+```
+squeue -u $USER -o '%10i %15P %10T %10M %10S %12l %3C %15R %25j' --long
+```
+
+- total number of CPU's allocated across all jobs
+
+```
+squeue -u $USER -o "%T %C" | grep "RUNNING" | cut -d " " -f2 | paste -sd+ | bc
+```
+
+- load of all nodes across all partitions
+
+```
+sinfo -N -O nodelist,partition,statelong,cpusstate,memory,freemem
+sinfo -N --format="%15N %15T %15C %15e %5T"
+```
+
+- find a partition with idle nodes; exlcude 'data_mover' and 'dev' partitions
+
+```
+sinfo -N -O nodelist,partition,statelong | grep 'idle' | grep -v 'data_mover' | grep -v 'dev' | tr -s '[:space:]' | cut -d ' ' -f2 | sort -u | head -1
+```
+
+- detect which 'mixed' queue has the most open nodes
+
+```
+sinfo -N -O nodelist,partition,statelong | grep 'mixed' | grep -v 'data_mover' | grep -v 'dev' | tr -s '[:space:]' | cut -d ' ' -f2 | sort | uniq -c | sort -k 1nr | head -1 | tr -s '[:space:]' | cut -d ' ' -f3
+```
+
+- submit jobs with `sbatch`
+
+```
+# bash
+printf "#!/bin/bash\n
+echo foo" | sbatch -D "${PWD}" -o "%j.out" -J "myjob" -p "cpu_short" --ntasks-per-node=1 -c "1" /dev/stdin
+
+sbatch -D "${PWD}" -o "%j.out" -J "myjob" -p "cpu_short" --ntasks-per-node=1 -c "1" <<E0F
+#!/bin/bash
+echo foo
+E0F
+
+sbatch -D "${PWD}" -o "%j.out" -J "myjob" -p "cpu_short" --ntasks-per-node=1 -c "1" --wrap="echo foo"
+
+sbatch -D "${PWD}" -o "%j.out" -J "myjob" -p "cpu_short" --ntasks-per-node=1 -c "1" --wrap="bash -c 'echo foo'"
+
+# capture job ID after submission
+sbatch -D "${PWD}" -o "%j.out" -J "myjob" -p "cpu_short" my_script.sh | tee >(sed 's|[^[:digit:]]*\([[:digit:]]*\).*|\1|' > job.id )
+
+# Makefile
+submit:
+	printf "#!/bin/bash\n \
+echo foo" | sbatch -D "$${PWD}" -o "%j.out" -J "myjob" -p "cpu_short" --ntasks-per-node=1 -c "1" /dev/stdin
+
+```
+
+- submit with `srun`
+
+```
+srun -D "$PWD" --output "slurm-%j.out" --input none -p "cpu_short" --ntasks-per-node=1 -c "1" bash -c 'some_command'
 ```
