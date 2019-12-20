@@ -404,3 +404,49 @@ echo foo" | sbatch -D "$${PWD}" -o "%j.out" -J "myjob" -p "cpu_short" --ntasks-p
 ```
 srun -D "$PWD" --output "slurm-%j.out" --input none -p "cpu_short" --ntasks-per-node=1 -c "1" bash -c 'some_command'
 ```
+
+# LSF
+
+- submit a job
+
+```
+bsub -oo lsf.log -W 100 bash /path/to/run.sh
+```
+
+- check for running jobs for a user
+
+```
+bjobs -u $USER
+```
+
+- check the status of a single job
+
+```
+bjobs -l 26767335
+```
+
+- kill a job
+
+```
+bkill 26767997
+```
+
+- check available SLA service groups to submit to
+
+```
+bsla
+```
+
+- check LSF user groups
+
+```
+bugroup
+```
+
+- start interactive session
+
+```
+bsub -Is -n 1 -R "rusage[mem=20]" bash
+```
+
+
