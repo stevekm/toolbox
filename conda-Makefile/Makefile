@@ -39,7 +39,7 @@ conda:
 # - - also note that this pip ships with conda, not the same pip as on global system
 # - note: this version of rabbitmq has issues with macOS El Capitan
 # ~~~ put your commands and criteria here ~~~ #
-conda-install: conda
+install: conda
 	conda install -y conda-forge::ncurses && \
 	conda install -y -c anaconda -c bioconda \
 	python=3.7 \
@@ -59,8 +59,12 @@ test1:
 	python --version
 	python -c 'import django; print(django.__version__)'
 
+# enter interactive shell sessions with environment configured
 python:
 	python
+
+bash:
+	bash
 
 CMD:=
 cmd:
