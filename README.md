@@ -291,6 +291,34 @@ bar = "baz"; print("foo {0}".format(bar)) # 2.6.6, 2.7.3, 3.4.3
 bar = "baz"; print("foo {}".format(bar)) # 2.7.3, 3.4.3
 ```
 
+### Django
+
+- unit test template
+
+```python
+from django.test import TestCase
+from django.conf import settings
+from django.core.management import call_command
+
+class TestSomething(TestCase):
+    fixtures = [
+    "some_fixtures1.json",
+    "some_fixtures2.json"
+    ]
+
+    def test_true(self):
+        self.assertTrue(True)
+
+    def test_some_thing1(self):
+        """
+        Test to check thing
+        """
+        # load more fixtures
+        test_files_fixture = os.path.join(settings.TEST_FIXTURE_DIR, "more_fixtures.json")
+        call_command('loaddata', test_files_fixture, verbosity=0)
+
+```
+
 ## Docker
 - To run a Docker base image directly:
 
