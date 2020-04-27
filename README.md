@@ -284,11 +284,26 @@ cat /etc/*release
 ```
 
 ## Python
+
 - format string compatibility across Python versions
 ```python
 bar = "baz"; print("foo %s" % bar) # 2.6.6, 2.7.3, 3.4.3
 bar = "baz"; print("foo {0}".format(bar)) # 2.6.6, 2.7.3, 3.4.3
 bar = "baz"; print("foo {}".format(bar)) # 2.7.3, 3.4.3
+```
+
+- List comprehension syntaxes
+
+```python
+>>> intervals = [ [1, 2], [3, 4], [5, 6] ]
+>>> [ start for start, stop in intervals ]
+[1, 3, 5]
+```
+
+```python
+>>> data = { 'good': [ [1, 2], [3, 4], [5, 6] ], 'bad' : [ [10, 20], [30, 40], [50, 60] ] }
+>>> [ interval for key, intervals in data.items() for interval in intervals ]
+[[10, 20], [30, 40], [50, 60], [1, 2], [3, 4], [5, 6]]
 ```
 
 ### Django
